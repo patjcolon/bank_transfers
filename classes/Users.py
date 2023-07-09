@@ -5,19 +5,30 @@ from helper_functions.get_floats import get_cash_amount
 from helper_functions.typr import typr
 from helper_functions.cashyr import cashyr
 
+from helper_functions.authenticators import func_pack
+
 class User:
     """ User super class. Contains and manages name, pin, and password attributes"""
     def __init__(self, name: str, pin: int, password: str):
         self. name = name
         self.pin = pin
-        self.password = password
+        self.password = func_pack(password)
+
         
+
+    @get_strings("pin")
+    def check_pin(self, entered_pin: str=None):
+        if self.pin != entered_pin:
+            return False
+        typr("PIN entry valid.")
+        return True
+
     # @get_strings("name") uses get_strings's decorator_get_name.
     # pre validates (within min and max length, only letters or spaces) a name and passes it as new_name
     @get_strings("name")
     def change_name(self, new_name: str = None):
         """"""
-        if new_name == None:
+        if new_name == None or new_name == self.name:
             typr(f"Your name '{self.name}' will remain unchanged.")
             typr("Please try again later.")
             return False
@@ -30,7 +41,7 @@ class User:
     # needs doc string
     @get_strings("pin")
     def change_pin(self, new_pin: str = None):
-        if new_pin == None:
+        if new_pin == None or new_pin == self.pin:
             typr("Your PIN will remain unchanged.")
             typr("Please try again later.")
             return False
@@ -43,7 +54,7 @@ class User:
 
     @get_strings("password")
     def change_password(self, new_password: str = None):
-        if new_password == None:
+        if new_password == None or new_password == self.password:
             typr("Your password will remain unchanged.")
             typr("Please try again later.")
             return False
@@ -81,11 +92,11 @@ class BankUser(User):
     def withdraw(self, cash_amount: float = None):
         if cash_amount == None:
             typr("Withdraw failed. Returning to menu.")
-            return False
+            return None
         if cash_amount > self.balance:
             typr(f"Cannot withdraw ${cash_amount:,.2f}, insufficient funds.")
             self.show_balance()
-            return False
+            return None
         
         self.balance -= cash_amount
         cashyr(cash_amount)
@@ -93,6 +104,19 @@ class BankUser(User):
         return cash_amount
     
 
-    @get_cash_amount # get cash amount through withdraw wrapper if possible
-    def transfer_money(self, cash_amount: float = None):
-        pass
+    def transfer_money(self, receiving_user = None, cash_amount: float = None, ):
+        if receiving_user == None:
+            typr("The account you are trying to transfer to does not exist.")
+            return False
+        
+        typr("Enter your PIN: ", "fast", False)
+        if self.check_pin():
+            typr("Enter amount to transfer: $", "fast", False)
+            cash_amount = self.withdraw()
+            if cash_amount is not None:
+                typr(f"Sending money to {receiving_user.name}")
+                receiving_user.deposit(cash_amount)
+                return True
+        
+        typr(f"Transfer to {receiving_user.name} failed.")
+        return False

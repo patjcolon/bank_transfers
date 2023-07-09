@@ -3,6 +3,7 @@
 import string
 from functools import wraps
 from .typr import typr
+from .authenticators import func_pack, func_unpack
 
 
 def get_strings(input_type: str):
@@ -129,8 +130,16 @@ def get_strings(input_type: str):
                 return function(self, password)
             #
             password_valid = False
+            failed_attempts = 0
             while not password_valid:
+                if retry_entry(failed_attempts) is False:
+                    return function(self, None)
+                
                 password = input()
+                password_valid = True
+            password = func_pack(password)
+            return function(self, password)
+
 
         return wrapper_get_password
 
