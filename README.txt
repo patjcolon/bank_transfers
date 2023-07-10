@@ -1,10 +1,22 @@
-by patjcolon
-Last updated: 7/8/2023
-WIP. Week 4 Workshop project.
+Week 4 Workshop project. BankUsers and Money Manipulation
+by patjcolon with help from: 
+Jack Seymour on the pack/unpack functions in authenticators.py
+Last updated: 7/9/2023
 
-Allows creation and maintenance of bank accounts and bank users.
+
+Finished:
+Allows maintenance of bank users "accounts".
 Bank users can change name, PIN, or password
 Bank users can deposit, withdraw, or check balance
 Bank users can perform inter-account transfers and payment-requests
+Text is displayed slowly letter by letter
+Money is represented by stylized bills and coins
 
-Plan to add context managers and .JSON held databases
+Unfinished / Unimplemented:
+User choices menus
+Account creation
+Password minimum requirements and max length within get_strings password wrapper
+Account database and context managers using JSON
+Account login using account database
+BankUser attribute changes being pushed to database on change event
+Payment request queue per account that notifies user on login/when option checked

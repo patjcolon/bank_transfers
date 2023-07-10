@@ -1,0 +1,4 @@
+
+{"//comment": ["test account dictionary that doesn't use packed passwords",
+"did not implement due to deadline time constraint", "may make use of eventually"],
+    "Pat Pat": ["0000", "pass123", 100.20], "Lara C": ["0099", "pass111", 999.99]}

@@ -12,10 +12,15 @@ def cashyr(cash_amount: float = 0, words_before_payout: str = "Here is your payo
     cashz = styl("Black", "Bold", "Green")
     coinz = styl("Black", "Bold", "White")
 
+    # dollar (integer) amount of input
     unpaid_dollars = int(cash_amount)
+    # coins (decimal) amount of input
+    # adds 0.00001 because floats. yeah kept eating my trailing penny in larger cash amounts
     unpaid_cents = int((cash_amount - unpaid_dollars + 0.000001) * 100)
 
     def get_bills(unpaid_dollars):
+        """takes integer and breaks it down into dollar groups
+        turns the ammount into a string of stylized dollar bills"""
         cashyr_payout = ""
         ten_gs = 0
         hundreds = 0
@@ -72,6 +77,8 @@ def cashyr(cash_amount: float = 0, words_before_payout: str = "Here is your payo
         
     
     def get_coins(unpaid_cents, as_change: bool = False):
+        """takes coin amount (100*decimal) and breaks it down into coin groups
+        turns the ammount into a string of stylized coins"""
         cashyr_payout = ""
         quarters = 0
         dimes = 0
@@ -119,7 +126,7 @@ def cashyr(cash_amount: float = 0, words_before_payout: str = "Here is your payo
         # if the user user only withdrew coins:
         return typr(f"Coins: {cashyr_payout}\033[0K")
 
-
+    #deciding wether to run through get bills, get coins, or both
     if cash_amount == unpaid_dollars:
         get_bills(unpaid_dollars)
         print()

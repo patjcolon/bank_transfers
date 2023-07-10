@@ -3,7 +3,7 @@ Contains text stylization features for text color, style, and background
 styl for all text style/color/background needs and unstyl to go back to default
 suitr is for use in card games. input list of cards ['AD', 'KH'] and it will return them as playing cards
 By patjcolon
-Last updated 6/28/2023
+Last updated 7/9/2023
 """
 
 
@@ -38,36 +38,3 @@ def styl(color_choice: str = "Default", style_choice: str = "Reset", highlight_c
 
     color_style_code = style_code + color_code + highlight_code
     return color_style_code
-
-
-def suitr(cards: list = ["LiveD", "LaughC","CodeH"]):
-    """suitr is a cardgame helper function that uses styl. it can take any card like 'AD' and turn it into
-    a white background card with red/black values and suit"""
-
-    # styl() presets for colorizing cards with a white background
-    rst = unstyl()                             # rst:   Reset unstyl()
-    reds = styl("Red", "Underline", "White")        # reds:  Red Suits      "Red Bold White"
-    blks = styl("Black", "Underline", "White")      # blks:  Black Suits    "Black Bold White"
-    # Unicode for suit symbols
-    suits = {
-    "D": "\u2666",
-    "C": "\u2663",
-    "H": "\u2665",
-    "S": "\u2660",
-    }
-    
-    # turning card input into a card
-    card_art = ""
-    for card in cards:
-        card_value = card[:-1]
-        card_suit = card[-1]
-        card_color = reds if card_suit == 'D' or card_suit == 'H' else blks
-        card_art += f"{card_color} {card_value} {suits[f'{card_suit}']} {rst}, "
-    card_art = card_art[:-2]
-    return f" {card_art}\033[0K"
-
-
-# u2620 is skull ☠ w on b, u2622 is radiation ☢ b on y, 2728 is sparkles for win ✨ 2B50⭐
-# \u00A2 is cents symbol ¢ b on w or b on , u0024 is dollar $ (dont need code...), 
-# u23F4 for hourglass ⏳, u23f0 is alarmclock ⏰, 
-# 270A-C is rock-paper-scissors ✊ ✋ ✌

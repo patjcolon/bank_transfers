@@ -1,10 +1,16 @@
-""""""
+""" context manager, idea was to use it for storing and updating bank account info
+and another idea to try to make individual user transfer requests 
+might come back to some day
+by patjcolon 
+last updated 7/9/2023"""
 
 import json
 #from helper_functions.typr import typr
 
 
 class File:
+    """ custom context manager class for making file generators
+    closes out file when done"""
     def __init__(self, name: str) -> None:
         self.name = name
 
@@ -18,6 +24,7 @@ class File:
 
     
     def read_file(self):
+        """yields file generator to save on resources and close out actual file"""
         try:
             print("trying...")
             with open(self.name, "r") as databases:
@@ -29,7 +36,8 @@ class File:
             print("finally")
 
 
-# when i come back: ... <3
+# learning how generators work
+"""
 with File("test.json") as file:
     print(file.read_file())
     db_gen = file.read_file()
@@ -39,3 +47,4 @@ with File("test.json") as file:
         db = i
         print(db)
     print("huh")
+"""

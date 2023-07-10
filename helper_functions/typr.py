@@ -1,7 +1,7 @@
 """Creating this module to house functions that change how print() works
 -or rather are custom printing functions using print() and other methods
 By: patjcolon
-Last updated: 6/28/2023"""
+Last updated: 7/9/2023"""
 
 from time import sleep
 from .styl import unstyl
@@ -32,6 +32,7 @@ def typr(text_to_print: str = "", speed: str = "fast", endline: bool = True):
         end_speed = 0.6
         c_since_endline +=1
         if fastest and hit_skpr: 
+            # lines can only be so long. set to be 13 cards (a suit) per line before going to next line. or 13 bills
             if c_since_endline > 350 and c in stprs:
                 c_since_endline = 0
                 print(f"{unstyl()}{c} ")
@@ -66,3 +67,19 @@ def typr(text_to_print: str = "", speed: str = "fast", endline: bool = True):
     sleep(end_speed)
     if endline: print()
     return ""
+
+
+def hide_unhide(hide:bool = True):
+    """Hides cursor if (True) or unhides cursor if (False) using ANSI escape characters"""
+    if hide:
+        return print('\033[?25l',end="")
+    print('\033[?25h',end="")
+
+
+def get_user_input(symbol_shown: str = ""):
+    """replacement for input() that unhides terminal cursor and then rehides it when done
+    symbol shown decides what text is displayed to user on input"""
+    hide_unhide(False)
+    user_input = input(typr(symbol_shown, "slow", False))
+    hide_unhide()
+    return user_input

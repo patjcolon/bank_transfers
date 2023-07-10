@@ -1,18 +1,24 @@
+"""Really only gets a cash value float. makes sure input is an actual cash value (see below)
+is a wrapper that injects cash float into wrapped function's first parameter (not self)
+by patjcolon
+Last updated: 7/9/2023"""
+
+
+
 from math import floor
 from functools import wraps
-from .typr import typr
+from .typr import typr, get_user_input
 
 def get_cash_amount(function):
-        """"""
-        # needs documentation string. validates input returns int between range
+        """gets a cash value from input and validates it
+        gets a float and ensures it is at least 0.01 and doesnt include fractions smaller than that"""
         @wraps(function)
         def wrapper_get_cash_amount(self, cash_amount: str = None):
             # admin use only: if cash_amount is given in wrapped_func(cash_amount), it will auto pass cash_amount.
             if cash_amount is not None:
                 return function(self, cash_amount)
 
-            #
-            cash_input = input().split(",")
+            cash_input = get_user_input().split(",")
             cash_input = ''.join(cash_input)
             try:
                 cash_input = float(cash_input)

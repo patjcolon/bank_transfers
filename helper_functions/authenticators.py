@@ -9,11 +9,13 @@ Challenge:
     Function returns a list
 '''
 from getpass import getpass
-from functools import wraps
+# from functools import wraps  <- for login authenticator. not implemented
 
 
 def func_unpack(_data):
-    '''Unpacking function'''
+    '''Unpacking function
+    takes a list of numbers and reverts packing done using bitwise xor operator,
+    which is repeatable and reversible with the right pattern. compares to iteration of i=0 i+=1'''
     i = 0
     out_string = ""
     for _chr in _data:
@@ -23,7 +25,10 @@ def func_unpack(_data):
 
 
 def func_pack(_string):
-    '''Packing function'''
+    '''Packing function
+    takes a string character by character and turns it into ascii decimal value representation
+    iterates through i=0 i+=1 using bitwise xor to compare and modify the binary representation
+     of the decimal value representation of the character in a reversible way '''
     i = 0
     out_data = []
     for _chr in _string:
@@ -32,12 +37,15 @@ def func_pack(_string):
     return out_data
 
 
+# test dict for login_authenticator
 accounts = {
            "patjcolon": "pass123",
            "lolyngee": "1224"
            }
 
+# not used. 
 def login_authenticator(function):
+    """login authentication decorator that runs user input against database entry"""
     def processor():
         username = input("What is your username? \n> ")
         password = getpass("What is your password? \n> ")

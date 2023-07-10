@@ -1,2 +1,2 @@
+# keeps all pycache folders from being added to branch changes and commits
 **__pycache__
-**discord_files

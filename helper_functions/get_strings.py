@@ -1,17 +1,24 @@
-""""""
+"""get string wrapper factory. for getting specific tailored strings and running them inside of wrapped functions
+used for getting a string that meets the standards of an account name, or an account pin, or an account password
+by patjcolon
+Last updated 7/9/2023"""
 
 import string
 from functools import wraps
-from .typr import typr
+from .typr import typr, hide_unhide, get_user_input
 from .authenticators import func_pack, func_unpack
 
 
 def get_strings(input_type: str):
     """ Decorator factory, input_type is used as key in a decorator selection dictionary
-    'name' : decorator_get_name(function) - returns str that is valid and formatted as a name"""
+    'name' : decorator_get_name(function) - returns str that is valid and formatted as a name
+    'pin' : returns a str that is valid and formatted as a pin
+    'password' : gets a valid password and passes it through func_pack() 
+    which then returns it as a modified list
+    """
     
-    #
     def retry_entry(failed_attempts):
+        """customizable attempt limiter. allows user to try up to x times before returning false"""
         max_attempts = 5
         remaining_attempts = max_attempts - failed_attempts
         if failed_attempts == 0:
@@ -28,7 +35,7 @@ def get_strings(input_type: str):
         return
 
     def decorator_get_name(function):
-        """ gets input() for name and returns a formatted valid name, repeating input until validated.
+        """ gets get_user_input() for name and returns a formatted valid name, repeating input until repeat attempts run out.
         Formatting: '   tim   guy ' -> 'Tim Guy'
         Validates string is within min and max length, and only uses letters or spaces.
         only counts spaces that are not leading or trailing,
@@ -53,7 +60,7 @@ def get_strings(input_type: str):
                 if retry_entry(failed_attempts) is False:
                     return function(self, None)
 
-                name = input()
+                name = get_user_input()
                 # formatting, removing whitespace except 1 ' ' between words and capitalizing first letters
                 name = ' '.join(name.split())
                 name = name.title()
@@ -80,8 +87,8 @@ def get_strings(input_type: str):
     
 
     def decorator_get_pin(function):
-        """"""
-        # needs documentation string. validates input returns int between range
+        """ gets get_user_input() for pin and returns a valid pin string, repeating input until
+        attempts run out. Validates string is within min and max length, and only uses 0-9 for characters."""
         @wraps(function)
         def wrapper_get_pin(self, pin: str = None):
             # admin use only: if pin is given in wrapped_func(pin), it will auto pass pin.
@@ -99,7 +106,7 @@ def get_strings(input_type: str):
                 if retry_entry(failed_attempts) is False:
                     return function(self, None)
 
-                pin = input()
+                pin = get_user_input()
                 pin_length = len(pin)
                 if not min_pin_length <= pin_length <= max_pin_length:
                     typr("PIN must be a 4 to 6 digits long.")
@@ -122,10 +129,10 @@ def get_strings(input_type: str):
 
     
     def decorator_get_password(function):
-        """"""
+        """gets input str and runs it through fun_pack() which turns it into a list of modified numbers"""
         @wraps(function)
         def wrapper_get_password(self, password: str = None):
-            #
+            # never finished the validation portion. like min and max characters, min special characters, etc
             if password is not None:
                 return function(self, password)
             #
@@ -135,7 +142,7 @@ def get_strings(input_type: str):
                 if retry_entry(failed_attempts) is False:
                     return function(self, None)
                 
-                password = input()
+                password = get_user_input()
                 password_valid = True
             password = func_pack(password)
             return function(self, password)
